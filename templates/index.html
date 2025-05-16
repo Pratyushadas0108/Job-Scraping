@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Job Scraper{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body text-center">
+                <h1 class="card-title mb-4">Welcome to Job Scraper</h1>
+                <p class="card-text mb-4">Search for job listings across multiple websites. Create an account to save your search history and receive job alerts.</p>
+                
+                {% if current_user.is_authenticated %}
+                    <form action="{{ url_for('search') }}" method="POST" class="mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="keyword" placeholder="Job title or keywords" required>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" name="location" placeholder="Location" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                {% else %}
+                    <div class="d-grid gap-2 col-md-6 mx-auto">
+                        <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+                        <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Register</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

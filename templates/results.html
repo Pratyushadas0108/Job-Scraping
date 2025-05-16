@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results - Job Scraper{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Search Results for "{{ keyword }}" in {{ location }}</h2>
+    
+    <div class="row mt-4">
+        {% for job in jobs %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ job.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ job.company }}</h6>
+                    <p class="card-text">
+                        <strong>Location:</strong> {{ job.location }}<br>
+                        {% if job.salary %}
+                        <strong>Salary:</strong> {{ job.salary }}<br>
+                        {% endif %}
+                        <strong>Source:</strong> {{ job.source }}
+                    </p>
+                    {% if job.link %}
+                    <a href="{{ job.link }}" target="_blank" class="btn btn-primary">View Job</a>
+                    {% endif %}
+                    <button class="btn btn-success save-job" 
+                            data-job='{{ job|tojson|safe }}'>
+                        Save Job
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const saveButtons = document.querySelectorAll('.save-job');
+    
+    saveButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const jobData = JSON.parse(this.dataset.job);
+            
+            fetch('/save_job', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jobData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.textContent = 'Saved!';
+                    this.disabled = true;
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-secondary');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save job');
+            });
+        });
+    });
+});
+</script>
+{% endblock %} 

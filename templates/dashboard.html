@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Job Scraper{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Search Jobs</h3>
+                <form action="{{ url_for('search') }}" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" name="keyword" placeholder="Job title or keywords" required>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" name="location" placeholder="Location" required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Search History</h3>
+                {% if search_history %}
+                    <div class="list-group">
+                        {% for search in search_history %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ search.keyword }}</h5>
+                                    <small>{{ search.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </div>
+                                <p class="mb-1">Location: {{ search.location }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No search history yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Create Job Alert</h3>
+                <form action="{{ url_for('create_alert') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="keyword" class="form-label">Job Title/Keywords</label>
+                        <input type="text" class="form-control" id="keyword" name="keyword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="min_salary" class="form-label">Minimum Salary (optional)</label>
+                        <input type="number" class="form-control" id="min_salary" name="min_salary">
+                    </div>
+                    <div class="mb-3">
+                        <label for="experience" class="form-label">Experience Level (optional)</label>
+                        <select class="form-select" id="experience" name="experience">
+                            <option value="">Any</option>
+                            <option value="entry">Entry Level</option>
+                            <option value="mid">Mid Level</option>
+                            <option value="senior">Senior Level</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Create Alert</button>
+                </form>
+
+                <h4 class="mt-4">Your Job Alerts</h4>
+                {% if job_alerts %}
+                    <div class="list-group">
+                        {% for alert in job_alerts %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ alert.keyword }}</h5>
+                                    <small>{{ alert.location }}</small>
+                                </div>
+                                {% if alert.min_salary %}
+                                    <p class="mb-1">Min Salary: ${{ alert.min_salary }}</p>
+                                {% endif %}
+                                {% if alert.experience %}
+                                    <p class="mb-1">Experience: {{ alert.experience }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No job alerts yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
