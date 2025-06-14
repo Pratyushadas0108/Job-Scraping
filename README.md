@@ -30,22 +30,11 @@ BeautifulSoup and Requests (for web scraping job listings)
 SMTP (for sending job alerts via email)
 
 4. Security Notes
-Basic authentication with Flask-Login for session handling
-
-Passwords currently stored in plain text (for demo purposes only)
+Basic authentication with Flask-Login for session handli
 
 In production, password hashing and secure storage practices are necessary
 
 Sensitive information like email credentials should be stored securely using environment variables
 
-HTTPS and proper session management are recommended for deployment
-
-5. Intended Use
-For job seekers looking for a customizable and automated job search tool
-
-For developers and students as a learning project involving full-stack development, web scraping, and user authentication
-
-As a base project that can be extended into a production-ready job recommendation platform
-
-6. License
+5. License
 This project is licensed under the MIT License.
